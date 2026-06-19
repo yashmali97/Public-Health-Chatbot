@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Public Health Hub</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+            <button class="close-btn" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul>
+            <li onclick="openDashboard(); toggleSidebar()">🏠 Dashboard</li>
+            <li onclick="openChat(); toggleSidebar()">🤖 AI Chatbot</li>
+            <li>⚙ Account Settings</li>
+            <li>📂 Chat History</li>
+            <li>📜 Disease Directory</li>
+            <li>🔒 Privacy & Data Policy</li>
+            <li>ℹ Medical Disclaimer</li>
+            <li class="danger" onclick="clearChat()">🗑 Clear Chat</li>
+            <li onclick="toggleDarkMode()">🌙 Toggle Dark Mode</li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main">
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-left">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1>Public Health Hub</h1>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-info">
+                    <span class="user-name">👤 Profile</span>
+                    <button class="logout-btn">🚪</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div class="dashboard-container" id="dashboard-view">
+            
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2>Welcome User ✨</h2>
+                    <p>Your central portal for health tracking and AI assistance.</p>
+                    
+                    <div class="cta-card">
+                        <h3>🤖 START AI HEALTH CHATBOT</h3>
+                        <p>Ask about any disease, symptoms, or recommended cures instantly.</p>
+                        <button class="cta-button" onclick="openChat()">Launch Chat Assistant</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Dashboard Cards -->
+            <div class="dashboard-overview">
+                <h3>DASHBOARD OVERVIEW</h3>
+                <div class="cards-grid">
+                    <div class="card" onclick="openChat()" style="cursor: pointer; border: 1px solid var(--primary);">
+                        <div class="card-icon" style="background: var(--primary); color: white;">🤖</div>
+                        <h4>AI Chatbot</h4>
+                        <p style="font-size: 14px; color: var(--text-muted);">Instant AI health assistant for your queries.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h4>Health Insights</h4>
+                        <ul>
+                            <li>• 0 Active Symptoms</li>
+                            <li>• Next checkup: None</li>
+                            <li>• Profile: 100% Setup</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <h4>Recent Queries</h4>
+                        <ul>
+                            <li>• Migraine cures</li>
+                            <li>• Flu prevention</li>
+                            <li>• Vitamin D sources</li>
+                        </ul>
+                    </div>
+                    <div class="card daily-tip">
+                        <div class="card-icon">📌</div>
+                        <h4>Daily Tip</h4>
+                        <p class="tip-text">"Stay hydrated! Aim for 3L of water today."</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Chat Area (Hidden by Default) -->
+        <div class="chat-container hidden" id="chat-view">
+            <div class="chat-header">
+                <button class="back-btn" onclick="openDashboard()">← Back to Dashboard</button>
+                <h2>AI Health Assistant</h2>
+            </div>
+            
+            <div id="chat-box" class="chat-box">
+                <div class="message bot">
+                    👋 Hello! Ask me any health-related question.
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Type your message..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Overlay for Sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

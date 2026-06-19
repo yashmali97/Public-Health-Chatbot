@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Public Health Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #F3F4F6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 style="color: #4F46E5; margin-bottom: 10px;">Welcome Back 👋</h1>
+            <p style="color: #6B7280; margin-bottom: 20px;">Sign in to continue</p>
+
+            <input type="email" id="loginEmail" placeholder="Enter Email" required>
+            <input type="password" id="loginPassword" placeholder="Enter Password" required>
+
+            <button onclick="loginUser()" style="cursor: pointer;">
+                Login
+            </button>
+
+            <p style="margin-top: 15px; font-size: 14px;">
+                Don't have an account?
+                <a href="signup.html" style="color: #4F46E5; font-weight: 600; text-decoration: none;">Signup</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

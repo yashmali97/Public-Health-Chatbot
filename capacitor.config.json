@@ -1,0 +1,13 @@
+{
+  "appId": "com.health.chatbot",
+  "appName": "Health Chatbot",
+  "webDir": "frontend",
+  "server": {
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}
