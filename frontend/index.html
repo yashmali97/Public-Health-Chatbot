@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Public Health Hub</title>
+
+    <!-- Auth Check -->
+    <script>
+        if (!localStorage.getItem("token")) {
+            console.log("No token found, redirecting to login...");
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Import Map for ES Modules -->
+    <script type="importmap">
+    {
+        "imports": {
+            "marked": "./marked.esm.js"
+        }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+            <button class="close-btn" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul>
+            <li onclick="openDashboard(); toggleSidebar()">🏠 Dashboard</li>
+            <li onclick="openChat(); toggleSidebar()">🤖 AI Chatbot</li>
+            <li>⚙ Account Settings</li>
+            <li>📂 Chat History</li>
+            <li>📜 Disease Directory</li>
+            <li>🔒 Privacy & Data Policy</li>
+            <li>ℹ Medical Disclaimer</li>
+            <li class="danger" onclick="clearChat()">🗑 Clear Chat</li>
+            <li onclick="toggleDarkMode()">🌙 Toggle Dark Mode</li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main">
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-left">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1>Public Health Hub</h1>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-info">
+                    <span class="user-name">👤 Profile</span>
+                    <button class="logout-btn" onclick="logoutUser()" style="margin-left: 10px; border: none; background: none; cursor: pointer; font-size: 18px;">
+                        🚪 Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div class="dashboard-container" id="dashboard-view">
+
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2 id="welcome-message">Welcome User ✨</h2>
+                    <p>Your central portal for health tracking and AI assistance.</p>
+
+                    <div class="cta-card">
+                        <h3>🤖 START AI HEALTH CHATBOT</h3>
+                        <p>Ask about any disease, symptoms, or recommended cures instantly.</p>
+                        <button class="cta-button" onclick="openChat()">Launch Chat Assistant</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Dashboard Cards -->
+            <div class="dashboard-overview">
+                <h3>DASHBOARD OVERVIEW</h3>
+                <div class="cards-grid">
+                    <div class="card" onclick="openChat()" style="cursor: pointer; border: 1px solid var(--primary);">
+                        <div class="card-icon" style="background: var(--primary); color: white;">🤖</div>
+                        <h4>AI Chatbot</h4>
+                        <p style="font-size: 14px; color: var(--text-muted);">Instant AI health assistant for your queries.</p>
+                    </div>
+                    <div class="card" onclick="openHealthInsightsModal()" style="cursor: pointer; border: 1px solid var(--border-color);">
+                        <div class="card-icon">📊</div>
+                        <h4>Health Insights</h4>
+                        <ul>
+                            <li id="insight-symptoms">• 0 Active Symptoms</li>
+                            <li id="insight-checkup">• Next checkup: None</li>
+                            <li id="insight-profile">• Profile: 0% Setup</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <h4>Recent Queries</h4>
+                        <ul id="recent-queries-list">
+                            <!-- Dynamically loaded recent queries -->
+                        </ul>
+                    </div>
+                    <div class="card daily-tip">
+                        <div class="card-icon">📌</div>
+                        <h4>Daily Tip</h4>
+                        <p class="tip-text">"Stay hydrated! Aim for 3L of water today."</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Chat Area (Hidden by Default) -->
+        <div class="chat-container hidden" id="chat-view">
+            <div class="chat-header">
+                <button class="back-btn" onclick="openDashboard()">← Back to Dashboard</button>
+                <h2>AI Health Assistant</h2>
+            </div>
+
+            <div id="chat-box" class="chat-box">
+                <div class="message bot">
+                    👋 Hello! Ask me any health-related question.
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Type your message..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Health Insights Modal -->
+    <div class="modal-overlay" id="health-insights-modal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Track Health Insights</h3>
+                <button class="modal-close-btn" onclick="closeHealthInsightsModal()">✕</button>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="tab-btn active" id="btn-tab-symptoms" onclick="switchModalTab('tab-symptoms')">Symptoms</button>
+                <button class="tab-btn" id="btn-tab-checkup" onclick="switchModalTab('tab-checkup')">Checkup</button>
+                <button class="tab-btn" id="btn-tab-profile" onclick="switchModalTab('tab-profile')">Profile Setup</button>
+            </div>
+            
+            <div class="modal-content">
+                <!-- Symptoms Tab -->
+                <div class="tab-pane active" id="tab-symptoms">
+                    <p class="tab-desc">Add or remove symptoms you are currently experiencing.</p>
+                    <div class="symptom-input-group">
+                        <input type="text" id="new-symptom-input" placeholder="Enter a symptom (e.g. Headache)" />
+                        <button onclick="addSymptomFromInput()">Add</button>
+                    </div>
+                    <ul class="modal-symptom-list" id="modal-symptom-list">
+                        <!-- Dynamic list of symptoms with delete buttons -->
+                    </ul>
+                </div>
+                
+                <!-- Checkup Tab -->
+                <div class="tab-pane" id="tab-checkup" style="display: none;">
+                    <p class="tab-desc">Schedule your next doctor or wellness appointment.</p>
+                    <div class="form-group">
+                        <label for="checkup-date-input">Next Checkup Date / Time</label>
+                        <input type="text" id="checkup-date-input" placeholder="e.g. June 15, 2026 or Tomorrow" />
+                    </div>
+                </div>
+                
+                <!-- Profile Tab -->
+                <div class="tab-pane" id="tab-profile" style="display: none;">
+                    <p class="tab-desc">Complete your profile details to calculate setup percentage.</p>
+                    <div class="form-group">
+                        <label for="profile-age">Age</label>
+                        <input type="number" id="profile-age" placeholder="e.g. 25" min="1" max="120" />
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-gender">Gender</label>
+                        <select id="profile-gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-blood">Blood Group</label>
+                        <input type="text" id="profile-blood" placeholder="e.g. O+, A-" />
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-height">Height (cm)</label>
+                        <input type="number" id="profile-height" placeholder="e.g. 175" min="30" max="300" />
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-weight">Weight (kg)</label>
+                        <input type="number" id="profile-weight" placeholder="e.g. 70" min="1" max="500" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeHealthInsightsModal()">Cancel</button>
+                <button class="save-btn" onclick="saveHealthInsights()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for Sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
